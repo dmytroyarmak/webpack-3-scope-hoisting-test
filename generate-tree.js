@@ -10,13 +10,9 @@ const ENGLISH_LETTERS = [
 const OUTPUT_DIR = './src';
 
 const indexImports = ENGLISH_LETTERS.map((x) => (`import { index_${x} } from '${OUTPUT_DIR}/index_${x}';`)).join('\n');
-const indexExecutions = ENGLISH_LETTERS.map((x) => (`   index_${x}();`)).join('\n');
+const indexExecutions = ENGLISH_LETTERS.map((x) => (`index_${x}();`)).join('\n');
 const index = `${indexImports}
-
-export function run () {
-${indexExecutions}
-}
-`;
+${indexExecutions}`;
 
 fs.writeFileSync('index.js', index);
 
@@ -32,11 +28,11 @@ function generateLevel(basePath, depth, prefix) {
         if (isLastLevel) {
             fileContent = `
 export function ${prefix}_${letter}() {
-    console.log('Executing ${prefix}_${letter});
+    console.log('Executing ${prefix}_${letter}');
 }
             `;
         } else {
-            const imports = ENGLISH_LETTERS.map((x) => (`import { ${prefix}_${letter}_${x} } from '${basePath}/${prefix}_${letter}/${prefix}_${letter}_${x}';`)).join('\n');
+            const imports = ENGLISH_LETTERS.map((x) => (`import { ${prefix}_${letter}_${x} } from './${prefix}_${letter}/${prefix}_${letter}_${x}';`)).join('\n');
             const executions = ENGLISH_LETTERS.map((x) => (`    ${prefix}_${letter}_${x}();`)).join('\n');
             fileContent = `${imports}
 export function ${prefix}_${letter}() {
